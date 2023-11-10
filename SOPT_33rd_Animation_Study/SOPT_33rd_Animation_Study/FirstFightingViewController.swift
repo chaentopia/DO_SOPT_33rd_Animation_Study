@@ -124,7 +124,7 @@ final class FirstFightingViewController: UIViewController {
         
         ikkImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(-5)
+            $0.bottom.equalToSuperview().inset(-10)
             $0.width.equalTo(100)
         }
     }
