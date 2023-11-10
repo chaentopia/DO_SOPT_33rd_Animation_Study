@@ -8,12 +8,12 @@
 import UIKit
 
 extension UIButton {
-    func shakeButton() {
+    func shakeButton(duration: Double = 0.3, delay: Double = 0, damping: Double = 0.2, velocity: Double = 1) {
         self.transform = CGAffineTransform(translationX: 0, y: 20)
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       usingSpringWithDamping: 0.2,
-                       initialSpringVelocity: 1,
+        UIView.animate(withDuration: duration,
+                       delay: delay,
+                       usingSpringWithDamping: damping,
+                       initialSpringVelocity: velocity,
                        options: [.curveEaseInOut]) {
             self.transform = .identity
         }
