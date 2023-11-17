@@ -18,10 +18,9 @@ final class SecondFightingViewController: UIViewController {
     private let timeLabel = UILabel()
     private let restartButton = UIButton()
     
-    //타이머 변수 선언
     private var timer : Timer?
-    //타이머에 사용할 번호값
     private var timerNum: Int = 0
+    private var isGameEnded: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,6 +140,7 @@ final class SecondFightingViewController: UIViewController {
         }
      
         timerNum = 30
+        isGameEnded = false // 타이머가 시작될 때 게임 종료 여부를 초기화
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
     }
     
@@ -172,6 +172,7 @@ final class SecondFightingViewController: UIViewController {
         //timerNum -1 감소시키기
         if timerNum > 0 {
             timerNum-=1
+            moveHidiImageView()
         }
     }
     
@@ -183,10 +184,14 @@ final class SecondFightingViewController: UIViewController {
         titleLabel.textColor = .black
         ikkImageView.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height / 2 - 40, width: 80, height: 80)
         hidiImageView.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height - 200, width: 80, height: 120)
-
+        isGameEnded = false // 재시작할 때 게임 종료 여부 초기화
     }
     
     func endGame(with message: String) {
+        if isGameEnded { // 이미 게임 종료 상태인 경우 더 이상 처리하지 않음
+            return
+        }
+        
         timer?.invalidate()
         timer = nil
         
@@ -194,9 +199,21 @@ final class SecondFightingViewController: UIViewController {
         titleLabel.textColor = .red
         
         restartButton.isHidden = false
+        hidiImageView.layer.removeAllAnimations() // 이미지뷰의 모든 애니메이션 제거
+        isGameEnded = true // 게임 종료 상태로 플래그 설정
     }
     
     func areFramesIntersecting(frame1: CGRect, frame2: CGRect) -> Bool {
         return frame1.intersects(frame2)
+    }
+    
+    // hidiImageView 이동 함수
+    private func moveHidiImageView() {
+        let randomX = CGFloat(arc4random_uniform(UInt32(UIScreen.main.bounds.width - 80))) // 랜덤 X 좌표 계산 (80은 hidiImageView의 너비)
+        let randomY = CGFloat(arc4random_uniform(UInt32(UIScreen.main.bounds.height - 120))) // 랜덤 Y 좌표 계산 (120은 hidiImageView의 높이)
+
+        UIView.animate(withDuration: 0.5, animations: {
+            self.hidiImageView.center = CGPoint(x: randomX, y: randomY)
+        })
     }
 }
