@@ -15,6 +15,7 @@ final class SecondFightingViewController: UIViewController {
     private let myView = UIImageView()
     private let titleLabel = UILabel()
     private let timeLabel = UILabel()
+    private let restartButton = UIButton()
     
     //타이머 변수 선언
     private var timer : Timer?
@@ -25,7 +26,6 @@ final class SecondFightingViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         setTarget()
-        startTimer()
     }
     
     private func setUI() {
@@ -60,12 +60,19 @@ final class SecondFightingViewController: UIViewController {
             $0.layer.backgroundColor = UIColor.white.cgColor
             $0.clipsToBounds = true
         }
+        
+        restartButton.do {
+            $0.setImage(UIImage(systemName: "arrow.clockwise.circle.fill"), for: .normal)
+            $0.imageView?.tintColor = .white
+            $0.isHidden = true
+        }
     }
     
     private func setLayout() {
         self.view.addSubview(myView)
         self.view.addSubview(titleLabel)
         self.view.addSubview(timeLabel)
+        self.view.addSubview(restartButton)
           
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -80,12 +87,20 @@ final class SecondFightingViewController: UIViewController {
             $0.width.equalTo(90)
             $0.height.equalTo(35)
         }
+        
+        restartButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(30)
+            $0.width.height.equalTo(100)
+            $0.centerY.equalTo(timeLabel)
+        }
     }
     
     private func setTarget() {
         //UIPanGestureRecognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(viewPan))
         self.myView.addGestureRecognizer(panGesture)
+        
+        self.restartButton.addTarget(self, action: #selector(restartButtonTapped), for: .touchUpInside)
     }
     
     @objc func viewPan(gesture: UIPanGestureRecognizer) {
@@ -95,6 +110,9 @@ final class SecondFightingViewController: UIViewController {
             viewToMove.center = CGPoint(x: viewToMove.center.x + translation.x, y: viewToMove.center.y + translation.y)
         }
         
+        if timer == nil || !timer!.isValid {
+            startTimer()
+        }
         gesture.setTranslation(.zero, in: view)
     }
     
@@ -134,9 +152,17 @@ final class SecondFightingViewController: UIViewController {
         if(timerNum == 0) {
             timer?.invalidate()
             timer = nil
+            self.restartButton.isHidden = false
         }
      
         //timerNum -1 감소시키기
         timerNum-=1
+    }
+    
+    
+    @objc private func restartButtonTapped() {
+        restartButton.isHidden = true
+        self.view.backgroundColor = .black
+        self.timeLabel.text = "\(timerNum)초"
     }
 }
