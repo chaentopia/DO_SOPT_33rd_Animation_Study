@@ -28,35 +28,35 @@ class SecondViewController: UIViewController {
     private func setTarget() {
         
         //UITapGestureRecognizer
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
-//        tapGesture.numberOfTapsRequired = 5
-//        testView.addGestureRecognizer(tapGesture)
-//        
-//       //UIPinchGestureRecognizer
-//        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(viewPinched))
-//        testView.addGestureRecognizer(pinchGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        tapGesture.numberOfTapsRequired = 5
+        testView.addGestureRecognizer(tapGesture)
         
-//        //UIRotationGestureRecognizer
-//        let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(viewRotation))
-//        testView.addGestureRecognizer(rotationGesture)
-//        
-//        //UISwipeGestureRecognizer
-//        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(viewSwipe))
-//        swipeRightGesture.direction = .right
-//        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(viewSwipe))
-//        swipeRightGesture.direction = .left
-//        self.view.addGestureRecognizer(swipeRightGesture)
-//        self.view.addGestureRecognizer(swipeLeftGesture)
-//        
-//        //UILongPressGestureRecognizer
-//        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(viewPress))
-//        //        longPressGesture.minimumPressDuration = 5.0
-//        //        longPressGesture.numberOfTouchesRequired = 2
-//        self.testView.addGestureRecognizer(longPressGesture)
-//        
-//        //UIPanGestureRecognizer
-//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(viewPan))
-//        self.testView.addGestureRecognizer(panGesture)
+       //UIPinchGestureRecognizer
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(viewPinched))
+        testView.addGestureRecognizer(pinchGesture)
+        
+        //UIRotationGestureRecognizer
+        let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(viewRotation))
+        testView.addGestureRecognizer(rotationGesture)
+        
+        //UISwipeGestureRecognizer
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(viewSwipe))
+        swipeRightGesture.direction = .right
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(viewSwipe))
+        swipeRightGesture.direction = .left
+        self.view.addGestureRecognizer(swipeRightGesture)
+        self.view.addGestureRecognizer(swipeLeftGesture)
+        
+        //UILongPressGestureRecognizer
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(viewPress))
+        //        longPressGesture.minimumPressDuration = 5.0
+        //        longPressGesture.numberOfTouchesRequired = 2
+        self.testView.addGestureRecognizer(longPressGesture)
+        
+        //UIPanGestureRecognizer
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(viewPan))
+        self.testView.addGestureRecognizer(panGesture)
         
     }
     
