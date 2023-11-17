@@ -12,7 +12,8 @@ import Then
 
 final class SecondFightingViewController: UIViewController {
     
-    private let myView = UIImageView()
+    private let ikkImageView = UIImageView()
+    private let hidiImageView = UIImageView()
     private let titleLabel = UILabel()
     private let timeLabel = UILabel()
     private let restartButton = UIButton()
@@ -36,15 +37,21 @@ final class SecondFightingViewController: UIViewController {
     private func setStyle() {
         self.view.backgroundColor = .black
         
-        myView.do {
+        ikkImageView.do {
             $0.image = UIImage(named: "ikk.png")
             $0.contentMode = .scaleAspectFit
             $0.isUserInteractionEnabled = true
             $0.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height / 2 - 40, width: 80, height: 80)
         }
         
+        hidiImageView.do {
+            $0.image = UIImage(named: "hellohidi.png")
+            $0.contentMode = .scaleAspectFit
+            $0.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height - 200, width: 80, height: 120)
+        }
+        
         titleLabel.do {
-            $0.text = "류희재를 피해 60초를 버텨라!"
+            $0.text = "류희재를 피해 30초를 버텨라!"
             $0.font = .boldSystemFont(ofSize: 18)
             $0.textColor = .black
             $0.textAlignment = .center
@@ -52,7 +59,7 @@ final class SecondFightingViewController: UIViewController {
         }
         
         timeLabel.do {
-            $0.text = "60초"
+            $0.text = "30초"
             $0.font = .systemFont(ofSize: 20)
             $0.textColor = .black
             $0.textAlignment = .center
@@ -69,7 +76,8 @@ final class SecondFightingViewController: UIViewController {
     }
     
     private func setLayout() {
-        self.view.addSubview(myView)
+        self.view.addSubview(ikkImageView)
+        self.view.addSubview(hidiImageView)
         self.view.addSubview(titleLabel)
         self.view.addSubview(timeLabel)
         self.view.addSubview(restartButton)
@@ -89,16 +97,20 @@ final class SecondFightingViewController: UIViewController {
         }
         
         restartButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(30)
-            $0.width.height.equalTo(100)
+            $0.trailing.equalToSuperview().inset(40)
+            $0.width.height.equalTo(35)
             $0.centerY.equalTo(timeLabel)
+        }
+        
+        restartButton.imageView?.snp.makeConstraints {
+            $0.width.height.equalToSuperview()
         }
     }
     
     private func setTarget() {
         //UIPanGestureRecognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(viewPan))
-        self.myView.addGestureRecognizer(panGesture)
+        self.ikkImageView.addGestureRecognizer(panGesture)
         
         self.restartButton.addTarget(self, action: #selector(restartButtonTapped), for: .touchUpInside)
     }
@@ -108,11 +120,18 @@ final class SecondFightingViewController: UIViewController {
 
         if let viewToMove = gesture.view {
             viewToMove.center = CGPoint(x: viewToMove.center.x + translation.x, y: viewToMove.center.y + translation.y)
+            
+            // 타이머가 동작 중이지 않으면 시작
+            if timer == nil || !timer!.isValid {
+                startTimer()
+            }
+            
+            if areFramesIntersecting(frame1: viewToMove.frame, frame2: hidiImageView.frame) {
+                // 게임 종료: 실패
+                endGame(with: "실패")
+            }
         }
         
-        if timer == nil || !timer!.isValid {
-            startTimer()
-        }
         gesture.setTranslation(.zero, in: view)
     }
     
@@ -121,7 +140,7 @@ final class SecondFightingViewController: UIViewController {
             timer!.invalidate()
         }
      
-        timerNum = 60
+        timerNum = 30
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
     }
     
@@ -133,36 +152,51 @@ final class SecondFightingViewController: UIViewController {
         case 0..<1:
             self.view.backgroundColor = .systemGray
         case 1..<10:
-            self.view.backgroundColor = .systemGray2
-        case 10..<20:
             self.view.backgroundColor = .systemGray3
-        case 20..<30:
-            self.view.backgroundColor = .systemGray4
-        case 30..<40:
+        case 10..<20:
             self.view.backgroundColor = .systemGray5
-        case 40..<50:
-            self.view.backgroundColor = .systemGray6
-        case 50...60:
+        case 20...30:
             self.view.backgroundColor = .black
         default:
             self.view.backgroundColor = .black
         }
         
-        //timerNum이 0이면(60초 경과) 타이머 종료
+        //timerNum이 0이면(30초 경과) 타이머 종료
         if(timerNum == 0) {
             timer?.invalidate()
             timer = nil
             self.restartButton.isHidden = false
+            endGame(with: "성공")
         }
      
         //timerNum -1 감소시키기
-        timerNum-=1
+        if timerNum > 0 {
+            timerNum-=1
+        }
     }
-    
     
     @objc private func restartButtonTapped() {
         restartButton.isHidden = true
         self.view.backgroundColor = .black
-        self.timeLabel.text = "\(timerNum)초"
+        self.timeLabel.text = "30초"
+        self.titleLabel.text = "류희재를 피해 30초를 버텨라!"
+        titleLabel.textColor = .black
+        ikkImageView.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height / 2 - 40, width: 80, height: 80)
+        hidiImageView.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 40, y: UIScreen.main.bounds.height - 200, width: 80, height: 120)
+
+    }
+    
+    func endGame(with message: String) {
+        timer?.invalidate()
+        timer = nil
+        
+        titleLabel.text = message
+        titleLabel.textColor = .red
+        
+        restartButton.isHidden = false
+    }
+    
+    func areFramesIntersecting(frame1: CGRect, frame2: CGRect) -> Bool {
+        return frame1.intersects(frame2)
     }
 }
