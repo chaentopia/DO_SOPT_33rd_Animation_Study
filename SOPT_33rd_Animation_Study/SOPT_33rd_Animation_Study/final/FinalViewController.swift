@@ -13,6 +13,7 @@ import Then
 final class FinalViewController: UIViewController {
     
     var paddingValue = 18
+    var keyBoardDummy = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "00", "0", "-1"]
     
     private let titleLabel = UILabel()
     private let fromLabel = UILabel()
@@ -23,10 +24,20 @@ final class FinalViewController: UIViewController {
     
     private let amountLabel = UILabel()
     private let nextButton = UIButton()
+    
+    private lazy var keyBoardCollectionView = UICollectionView(frame: .zero, collectionViewLayout: keyBoardFlowLayout)
+    private let keyBoardFlowLayout = UICollectionViewFlowLayout()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+        setCollectionView()
+    }
+    
+    private func setCollectionView() {
+        keyBoardCollectionView.register(KeyboardCollectionViewCell.self, forCellWithReuseIdentifier: KeyboardCollectionViewCell.identifier)
+        keyBoardCollectionView.delegate = self
+        keyBoardCollectionView.dataSource = self
     }
     
     private func setUI() {
@@ -86,10 +97,20 @@ final class FinalViewController: UIViewController {
             $0.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
             $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         }
+        
+        keyBoardFlowLayout.do {
+            $0.minimumLineSpacing = 24
+            $0.minimumInteritemSpacing = 27
+            $0.itemSize = CGSize(width: 85, height: 52)
+        }
+        
+        keyBoardCollectionView.do {
+            $0.backgroundColor = .clear
+        }
     }
     
     private func setLayout() {
-        [titleLabel, fromLabel, balanceLabel, toLabel, accountLabel, amountLabel, errorLabel, nextButton].forEach {
+        [titleLabel, fromLabel, balanceLabel, toLabel, accountLabel, amountLabel, errorLabel, nextButton, keyBoardCollectionView].forEach {
             view.addSubview($0)
         }
         
@@ -133,6 +154,12 @@ final class FinalViewController: UIViewController {
             $0.height.equalTo(60)
             $0.top.equalTo(amountLabel.snp.bottom).offset(124)
         }
+        
+        keyBoardCollectionView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(40)
+            $0.top.equalTo(nextButton.snp.bottom).offset(12)
+            $0.height.equalTo(280)
+        }
     }
 }
 
@@ -140,5 +167,20 @@ final class FinalViewController: UIViewController {
 extension FinalViewController {
     @objc private func nextButtonTapped() {
         print("다음")
+    }
+}
+
+
+extension FinalViewController: UICollectionViewDelegate { }
+
+extension FinalViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KeyboardCollectionViewCell.identifier, for: indexPath) as? KeyboardCollectionViewCell else { return UICollectionViewCell() }
+        cell.bindData(index: keyBoardDummy[indexPath.row])
+        return cell
     }
 }
