@@ -17,18 +17,26 @@ final class FinalViewController: UIViewController {
     var amountMoney: [String] = [] {
         didSet {
             if Int(amountMoney.joined(separator: "")) ?? 0 > 1000000 {
-                errorLabel.isHidden = false
                 isSendAvailable = false
-                print("100만원 넘음!")
             } else {
-                errorLabel.isHidden = true
                 isSendAvailable = true
-                print("100만원 이하임")
             }
         }
     }
     
-    var isSendAvailable = true
+    var isSendAvailable = true {
+        didSet {
+            if isSendAvailable == false || amountMoney.isEmpty {
+                errorLabel.isHidden = false
+                nextButton.alpha = 0.5
+                nextButton.isEnabled = false
+            } else {
+                errorLabel.isHidden = true
+                nextButton.alpha = 1
+                nextButton.isEnabled = true
+            }
+        }
+    }
     
     private let titleLabel = UILabel()
     private let fromLabel = UILabel()
@@ -42,7 +50,7 @@ final class FinalViewController: UIViewController {
     
     private lazy var keyBoardCollectionView = UICollectionView(frame: .zero, collectionViewLayout: keyBoardFlowLayout)
     private let keyBoardFlowLayout = UICollectionViewFlowLayout()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -112,6 +120,8 @@ final class FinalViewController: UIViewController {
             $0.titleLabel?.textColor = .white
             $0.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
             $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+            $0.alpha = 0.5
+            $0.isEnabled = false
         }
         
         keyBoardFlowLayout.do {
@@ -188,7 +198,20 @@ extension FinalViewController {
 
 extension FinalViewController: KeyBoardButtonDelegate {
     func keyboardButtonTapped(data: String) {
-        if data == "-1" {
+        
+        switch data {
+        case "0":
+            if isSendAvailable == true && !amountMoney.isEmpty {
+                amountMoney.append("0")
+                amountLabel.text = amountMoney.joined(separator: "")
+            }
+        case "00":
+            if isSendAvailable == true && !amountMoney.isEmpty {
+                amountMoney.append("0")
+                amountMoney.append("0")
+                amountLabel.text = amountMoney.joined(separator: "")
+            }
+        case "-1":
             if amountMoney.isEmpty {
                 print("지울 것 없음 ㅋ")
             } else {
@@ -202,17 +225,13 @@ extension FinalViewController: KeyBoardButtonDelegate {
                 amountLabel.text = amountMoney.joined(separator: "")
                 amountLabel.textColor = .white
             }
-        } else {
+        default:
             if isSendAvailable == true {
-                if data == "00" {
-                    amountMoney.append("0")
-                    amountMoney.append("0")
-                } else {
-                    amountMoney.append(data)
-                }
+                amountMoney.append(data)
                 amountLabel.text = amountMoney.joined(separator: "")
                 amountLabel.textColor = .white
             }
+            print("하이")
         }
     }
 }
