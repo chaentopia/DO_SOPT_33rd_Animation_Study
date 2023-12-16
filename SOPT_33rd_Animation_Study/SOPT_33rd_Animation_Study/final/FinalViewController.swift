@@ -203,13 +203,13 @@ extension FinalViewController: KeyBoardButtonDelegate {
         case "0":
             if isSendAvailable == true && !amountMoney.isEmpty {
                 amountMoney.append("0")
-                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.text = Int(amountMoney.joined(separator: ""))?.priceText
             }
         case "00":
             if isSendAvailable == true && !amountMoney.isEmpty {
                 amountMoney.append("0")
                 amountMoney.append("0")
-                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.text = Int(amountMoney.joined(separator: ""))?.priceText
             }
         case "-1":
             if amountMoney.isEmpty {
@@ -222,16 +222,15 @@ extension FinalViewController: KeyBoardButtonDelegate {
                 amountLabel.textColor = UIColor(hexCode: "43464D")
                 amountLabel.text = "얼마나 옮길까요?"
             } else {
-                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.text = Int(amountMoney.joined(separator: ""))?.priceText
                 amountLabel.textColor = .white
             }
         default:
             if isSendAvailable == true {
                 amountMoney.append(data)
-                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.text = Int(amountMoney.joined(separator: ""))?.priceText
                 amountLabel.textColor = .white
             }
-            print("하이")
         }
     }
 }
