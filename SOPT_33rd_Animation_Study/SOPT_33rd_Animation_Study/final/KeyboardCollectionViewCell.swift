@@ -43,6 +43,7 @@ final class KeyboardCollectionViewCell: UICollectionViewCell {
             $0.imageView?.contentMode = .scaleAspectFill
             $0.imageView?.tintColor = .white
             $0.addTarget(self, action: #selector(keyBoardButtonTapped), for: .touchUpInside)
+            $0.layer.cornerRadius = 10
         }
     }
     
@@ -72,5 +73,13 @@ final class KeyboardCollectionViewCell: UICollectionViewCell {
     
     @objc func keyBoardButtonTapped() {
         keyboardButtonDelegate?.keyboardButtonTapped(data: numberIndex)
+        
+        UIView.animate(withDuration: 0.15) { [self] in
+            keyBoardButton.layer.backgroundColor = UIColor(hexCode: "3B3D44", alpha: 1.0).cgColor
+        } completion: { _ in
+            UIView.animate(withDuration: 0.3) { [self] in
+                keyBoardButton.layer.backgroundColor = UIColor(hexCode: "3B3D44", alpha: 0).cgColor
+            }
+        }
     }
 }

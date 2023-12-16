@@ -28,11 +28,15 @@ final class FinalViewController: UIViewController {
         didSet {
             if isSendAvailable == false || amountMoney.isEmpty {
                 errorLabel.isHidden = false
-                nextButton.alpha = 0.5
+                UIView.animate(withDuration: 0.15) { [self] in
+                    nextButton.alpha = 0.5
+                }
                 nextButton.isEnabled = false
             } else {
                 errorLabel.isHidden = true
-                nextButton.alpha = 1
+                UIView.animate(withDuration: 0.15) { [self] in
+                    nextButton.alpha = 1
+                }
                 nextButton.isEnabled = true
             }
         }
@@ -198,7 +202,6 @@ extension FinalViewController {
 
 extension FinalViewController: KeyBoardButtonDelegate {
     func keyboardButtonTapped(data: String) {
-        
         switch data {
         case "0":
             if isSendAvailable == true && !amountMoney.isEmpty {
@@ -234,7 +237,6 @@ extension FinalViewController: KeyBoardButtonDelegate {
         }
     }
 }
-
 
 extension FinalViewController: UICollectionViewDelegate { }
 
