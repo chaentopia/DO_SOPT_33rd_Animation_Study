@@ -18,8 +18,10 @@ final class FinalViewController: UIViewController {
         didSet {
             if Int(amountMoney.joined(separator: "")) ?? 0 > 1000000 {
                 isSendAvailable = false
+                errorLabel.isHidden = false
             } else {
                 isSendAvailable = true
+                errorLabel.isHidden = true
             }
         }
     }
@@ -27,13 +29,11 @@ final class FinalViewController: UIViewController {
     var isSendAvailable = true {
         didSet {
             if isSendAvailable == false || amountMoney.isEmpty {
-                errorLabel.isHidden = false
                 UIView.animate(withDuration: 0.15) { [self] in
                     nextButton.alpha = 0.5
                 }
                 nextButton.isEnabled = false
             } else {
-                errorLabel.isHidden = true
                 UIView.animate(withDuration: 0.15) { [self] in
                     nextButton.alpha = 1
                 }

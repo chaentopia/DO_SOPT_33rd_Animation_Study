@@ -38,7 +38,7 @@ final class KeyboardCollectionViewCell: UICollectionViewCell {
     
     private func setStyle() {
         keyBoardButton.do {
-            $0.titleLabel?.font = UIFont(name: "Pretendard-Medium", size: 15)
+            $0.titleLabel?.font = UIFont(name: "Pretendard-Medium", size: 20)
             $0.titleLabel?.textColor = UIColor(hexCode: "DDDDDF")
             $0.imageView?.contentMode = .scaleAspectFill
             $0.imageView?.tintColor = .white
