@@ -10,11 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
+protocol KeyBoardButtonDelegate {
+    func keyboardButtonTapped(data: String)
+}
+
 final class KeyboardCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "KeyboardCollectionViewCell"
+    var keyboardButtonDelegate: KeyBoardButtonDelegate?
     
-    private let keyBoardButton = UIButton()
+    let keyBoardButton = UIButton()
     var numberIndex = "1"
     
     override init(frame: CGRect) {
@@ -66,6 +71,6 @@ final class KeyboardCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func keyBoardButtonTapped() {
-        print(numberIndex)
+        keyboardButtonDelegate?.keyboardButtonTapped(data: numberIndex)
     }
 }

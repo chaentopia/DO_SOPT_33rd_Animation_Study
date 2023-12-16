@@ -14,6 +14,21 @@ final class FinalViewController: UIViewController {
     
     var paddingValue = 18
     var keyBoardDummy = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "00", "0", "-1"]
+    var amountMoney: [String] = [] {
+        didSet {
+            if Int(amountMoney.joined(separator: "")) ?? 0 > 1000000 {
+                errorLabel.isHidden = false
+                isSendAvailable = false
+                print("100만원 넘음!")
+            } else {
+                errorLabel.isHidden = true
+                isSendAvailable = true
+                print("100만원 이하임")
+            }
+        }
+    }
+    
+    var isSendAvailable = true
     
     private let titleLabel = UILabel()
     private let fromLabel = UILabel()
@@ -85,7 +100,8 @@ final class FinalViewController: UIViewController {
         }
         
         errorLabel.do {
-            $0.text = "한 번에 200만원까지 옮길 수 있어요."
+            $0.isHidden = true
+            $0.text = "한 번에 100만원까지 옮길 수 있어요."
             $0.textColor = UIColor(hexCode: "EC5E5E")
             $0.font = UIFont(name: "Pretendard-Bold", size: 12)
         }
@@ -170,6 +186,37 @@ extension FinalViewController {
     }
 }
 
+extension FinalViewController: KeyBoardButtonDelegate {
+    func keyboardButtonTapped(data: String) {
+        if data == "-1" {
+            if amountMoney.isEmpty {
+                print("지울 것 없음 ㅋ")
+            } else {
+                amountMoney.removeLast()
+            }
+            
+            if amountMoney.isEmpty {
+                amountLabel.textColor = UIColor(hexCode: "43464D")
+                amountLabel.text = "얼마나 옮길까요?"
+            } else {
+                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.textColor = .white
+            }
+        } else {
+            if isSendAvailable == true {
+                if data == "00" {
+                    amountMoney.append("0")
+                    amountMoney.append("0")
+                } else {
+                    amountMoney.append(data)
+                }
+                amountLabel.text = amountMoney.joined(separator: "")
+                amountLabel.textColor = .white
+            }
+        }
+    }
+}
+
 
 extension FinalViewController: UICollectionViewDelegate { }
 
@@ -181,6 +228,7 @@ extension FinalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KeyboardCollectionViewCell.identifier, for: indexPath) as? KeyboardCollectionViewCell else { return UICollectionViewCell() }
         cell.bindData(index: keyBoardDummy[indexPath.row])
+        cell.keyboardButtonDelegate = self
         return cell
     }
 }
