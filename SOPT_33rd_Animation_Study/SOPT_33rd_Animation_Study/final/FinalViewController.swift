@@ -63,6 +63,11 @@ final class FinalViewController: UIViewController {
         setCollectionView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     private func setCollectionView() {
         keyBoardCollectionView.register(KeyboardCollectionViewCell.self, forCellWithReuseIdentifier: KeyboardCollectionViewCell.identifier)
         keyBoardCollectionView.delegate = self
@@ -198,7 +203,8 @@ final class FinalViewController: UIViewController {
 
 extension FinalViewController {
     @objc private func nextButtonTapped() {
-        print("다음")
+        let completeViewController = CompleteViewController()
+        self.navigationController?.pushViewController(completeViewController, animated: true)
     }
 }
 
