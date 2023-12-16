@@ -19,6 +19,8 @@ final class FinalViewController: UIViewController {
             if Int(amountMoney.joined(separator: "")) ?? 0 > 1000000 {
                 isSendAvailable = false
                 errorLabel.isHidden = false
+                errorLabel.shakeLabel()
+                amountLabel.shakeLabel()
             } else {
                 isSendAvailable = true
                 errorLabel.isHidden = true
