@@ -12,7 +12,7 @@ import Then
 
 final class FinalViewController: UIViewController {
     
-    var paddingValue = 18
+    static var paddingValue = 18
     var keyBoardDummy = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "00", "0", "-1"]
     var amountMoney: [String] = [] {
         didSet {
@@ -158,7 +158,7 @@ final class FinalViewController: UIViewController {
         
         fromLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(38)
-            $0.leading.equalToSuperview().inset(paddingValue)
+            $0.leading.equalToSuperview().inset(FinalViewController.paddingValue)
         }
         
         balanceLabel.snp.makeConstraints {
