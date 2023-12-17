@@ -19,7 +19,7 @@ final class CompleteViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let completeButton = UIButton()
     private let emitterLayer = CAEmitterLayer()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -127,6 +127,11 @@ final class CompleteViewController: UIViewController {
     private func completeTransfer() {
         loadingView.play()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            let type = UINotificationFeedbackGenerator.FeedbackType.success
+            let generator = UINotificationFeedbackGenerator()
+            generator.prepare()
+            generator.notificationOccurred(type)
+            
             self?.loadingView.isHidden = true
             self?.loadingView.stop()
             self?.setUpEmitterLayer()
@@ -137,9 +142,9 @@ final class CompleteViewController: UIViewController {
     private func showEmitterCell() {
         let x = UIScreen.main.bounds.width / 2
         let y = UIScreen.main.bounds.height / 4
-
+        
         emitterLayer.emitterPosition = CGPoint(x: x, y: y)
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
             self?.emitterLayer.birthRate = 0
         }
@@ -157,6 +162,11 @@ final class CompleteViewController: UIViewController {
 
 extension CompleteViewController {
     @objc private func completeButtonTapped() {
+        let style = UIImpactFeedbackGenerator.FeedbackStyle.soft
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
+        
         self.navigationController?.popViewController(animated: true)
         
         UIView.animate(withDuration: 0.3) { [self] in
@@ -166,6 +176,5 @@ extension CompleteViewController {
         } completion: { _ in
             self.loadingView.isHidden = false
         }
-        
     }
 }
