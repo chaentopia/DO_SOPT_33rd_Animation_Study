@@ -13,10 +13,43 @@ import Then
 final class CompleteViewController: UIViewController {
     
     private let completeButton = UIButton()
+    private let emitterLayer = CAEmitterLayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        setUpEmitterLayer()
+        showEmitterCell()
+    }
+    
+    private func setUpEmitterLayer() {
+        emitterLayer.emitterCells = [emitterCoinCell]
+    }
+    
+    private var emitterCoinCell: CAEmitterCell {
+        let cell = CAEmitterCell()
+        cell.contents = UIImage(named: "coin")?.cgImage
+        
+        cell.lifetime = 3
+        cell.birthRate = 40
+        
+        cell.scale = 0.09
+        cell.scaleRange = 0.04
+        
+        cell.spin = 5
+        cell.spinRange = 10
+        
+        cell.emissionRange = CGFloat.pi * 2
+        
+        cell.velocity = 500
+        cell.velocityRange = 50
+        cell.yAcceleration = 800
+        
+        return cell
     }
     
     private func setUI() {
@@ -49,6 +82,19 @@ final class CompleteViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(FinalViewController.paddingValue)
             $0.bottom.equalToSuperview().inset(50)
         }
+    }
+    
+    private func showEmitterCell() {
+        let x = UIScreen.main.bounds.width / 2
+        let y = UIScreen.main.bounds.height / 4
+
+        emitterLayer.emitterPosition = CGPoint(x: x, y: y)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+            self?.emitterLayer.birthRate = 0
+        }
+        
+        view.layer.addSublayer(emitterLayer)
     }
 }
 

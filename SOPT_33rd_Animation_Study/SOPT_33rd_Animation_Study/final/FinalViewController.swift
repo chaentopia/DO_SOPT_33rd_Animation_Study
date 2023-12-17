@@ -148,6 +148,7 @@ final class FinalViewController: UIViewController {
         
         keyBoardCollectionView.do {
             $0.backgroundColor = .clear
+            $0.isScrollEnabled = false
         }
     }
     
