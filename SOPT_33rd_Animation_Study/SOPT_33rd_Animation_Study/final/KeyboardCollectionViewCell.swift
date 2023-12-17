@@ -74,6 +74,11 @@ final class KeyboardCollectionViewCell: UICollectionViewCell {
     @objc func keyBoardButtonTapped() {
         keyboardButtonDelegate?.keyboardButtonTapped(data: numberIndex)
         
+        let style = UIImpactFeedbackGenerator.FeedbackStyle.soft
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
+        
         UIView.animate(withDuration: 0.15) { [self] in
             keyBoardButton.layer.backgroundColor = UIColor(hexCode: "3B3D44", alpha: 1.0).cgColor
         } completion: { _ in

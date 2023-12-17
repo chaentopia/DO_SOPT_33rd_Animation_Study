@@ -21,6 +21,11 @@ final class FinalViewController: UIViewController {
                 errorLabel.isHidden = false
                 errorLabel.shakeLabel()
                 amountLabel.shakeLabel()
+                
+                let style = UINotificationFeedbackGenerator.FeedbackType.error
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(style)
             } else {
                 isSendAvailable = true
                 errorLabel.isHidden = true
@@ -203,6 +208,12 @@ final class FinalViewController: UIViewController {
 
 extension FinalViewController {
     @objc private func nextButtonTapped() {
+        
+        let style = UIImpactFeedbackGenerator.FeedbackStyle.soft
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
+        
         let completeViewController = CompleteViewController()
         self.navigationController?.pushViewController(completeViewController, animated: true)
     }
